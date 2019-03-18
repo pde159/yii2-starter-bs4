@@ -4,6 +4,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use kartik\icons\Icon;
 use kartik\bs4dropdown\Dropdown;
+use cebe\gravatar\Gravatar;
 
 ?>
 
@@ -11,19 +12,16 @@ use kartik\bs4dropdown\Dropdown;
     'options' => ['class' => 'navbar-nav ml-auto'],
     'items' => [
         [
-            'label'  => Icon::show('user').'<span class="badge badge-danger navbar-badge">3</span>',
+            'label'  => Icon::show('sign-out-alt'),
             'encode' => false,
-            'url' => ['#'],
+            'url' => ['/user/security/logout'],
             'linkOptions' => [
-                'data-toggle' => 'dropdown',
-            ],
-            'items' => [
-                [
-                    'label'  => 'username',
-                    'url' => ['#'],
-                ],
+                'data-method' => 'POST',
+                'data-toggle' => 'tooltip',
+                'title' => Yii::t('app', 'Sign Out')
             ],
         ],
     ],
+    
     'dropdownClass' => Dropdown::classname()
 ]); ?>

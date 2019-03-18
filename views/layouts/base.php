@@ -31,14 +31,22 @@ AppAsset::register($this);
 ])?>
 
 <?php $this->beginBody() ?>
+
+
 <div class="wrapper">
+
+<?php if (Yii::$app->user->isGuest) { ?>
+    <?= $this->render('login',[
+        'content' => $content,
+    ]) ?>
+<?php } else { ?>
     <?php NavBar::begin([
         'options'    => [
             'class' => 'main-header navbar navbar-expand bg-white navbar-light border-bottom',
         ],
     ]); ?>
-        <?= $this->render('leftbar') ?>
-        <?= $this->render('rightbar') ?>
+    <?= $this->render('leftbar') ?>
+    <?= $this->render('rightbar') ?>
     <?php NavBar::end(); ?>
     <?= $this->render('sidebar') ?>
     <?= $content ?>
@@ -53,3 +61,5 @@ AppAsset::register($this);
 <?= Html::endTag('html') ?>
 
 <?php $this->endPage() ?>
+
+<?php } ?>

@@ -9,8 +9,8 @@ use app\widgets\Menu;
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <?= Html::a(
-        Html::img('@web/images/logo.png', [
-            'alt'   => 'AdminLTE Logo',
+        Html::img('@web/img/yii-logo.png', [
+            'alt'   => 'App Logo',
             'class' => 'brand-image img-circle elevation-3',
             'style' => 'opacity: .8',
         ]).Html::tag('span', 'TOT', ['class' => 'brand-text font-weight-light']),
@@ -21,83 +21,61 @@ use app\widgets\Menu;
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-            <?= Html::img('@web/images/user2-160x160.jpg', [
-                'alt'   => 'User Image',
-                'class' => 'img-circle elevation-2',
-            ]) ?>
+            <?= cebe\gravatar\Gravatar::widget([
+                    'email' => Yii::$app->user->identity->profile->getAttribute('gravatar_email') || null,
+                    'options' => [
+                        'alt' => 'User Image',
+                        'class' => "img-circle elevation-2"
+                    ],
+                ]) ?>
             </div>
             <div class="info">
                 <?= Html::a('Alexander Pierce', ['#'], ['class' => 'd-block']) ?>
+                <?= Html::a(
+                    Icon::show('circle',['class' => 'text-success fa-fw']).Yii::t('app', 'Online'),
+                    ['/user/settings/account'],
+                    ['class' => 'd-block']
+                ) ?>
             </div>
         </div>
 
         <nav class="mt-2">
         <?= Menu::widget([
             'items' => [
+                ['label' => 'Menu', 'options' => ['class' => 'text-white']],
                 [
                     'label' => 'dashboard',
-                    'url'   => ['#'],
+                    'url'   => ['/site'],
                     'icon'  => Icon::show('tachometer-alt'),
                 ],
                 [
-                    'label' => 'Products',
-                    'url'   => ['product/index'],
-                    'icon'  => Icon::show('cubes'),
-                    'badge' => 'New',
-                    'badgeOptions' => [
-                        'class' => 'badge badge-danger',
-                    ],
-                    'items' => [
+                    "label" => Yii::t('app', 'Admin'),
+                    "icon"  => Icon::show('users'),
+                    "items" => [
                         [
-                            'label' => 'New Arrivals',
-                            'url'   => ['product/index'],
-                            'badge' => 'New',
-                            'badgeOptions' => [
-                                'class' => 'right badge badge-danger',
+                            "label" => Yii::t('app', 'Users Management'),
+                            "icon" => Icon::show('user'),
+                            "url" => ["/user/admin/index"],
+                            "visible" => Yii::$app->user->can('userManage'),
+                        ],
+                        [
+                            "label" => Yii::t('app', 'Advanced'),
+                            "icon" => Icon::show('microchip'),
+                            "items" => [
+                                [
+                                    "label" => "OP Cache",
+                                    "icon" => Icon::show('archive'),
+                                    "url" => ["/opcache/default/index"]
+                                ],
+                                [
+                                    "label" => "GII helper", 
+                                    "icon" => Icon::show('thumbs-up'),
+                                    "url" => ["/gii"]],
                             ],
-                        ],
-                        [
-                            'label' => 'Most Popular',
-                            'url'   => ['product/index',
-                            'tag'   => 'popular']
+                            "visible" => Yii::$app->user->can('advancedView'),
                         ],
                     ],
-                ],
-                [
-                    'label' => 'Login', 
-                    'url' => ['site/login'],
-                ],
-                [
-                    'label' => 'User Manage', 
-                    'url' => ['/user/admin/index'],
-                ],
-                [
-                    'label' => Yii::t('app', 'RBAC Rules'),
-                    'url' => '#',
-                    'icon' => Icon::show('flag'),
-                    'active' => in_array(Yii::$app->controller->id, ['rbac-auth-assignment', 'rbac-auth-item', 'rbac-auth-item-child', 'rbac-auth-rule']),
-                    'items' => [
-                        [
-                            'label' => Yii::t('app', 'Auth Assignment'),
-                            'url' => ['/rbac/rbac-auth-assignment/index'],
-                            'icon' => Icon::show('circle'),
-                        ],
-                        [
-                            'label' => Yii::t('app', 'Auth Items'),
-                            'url' => ['/rbac/rbac-auth-item/index'],
-                            'icon' => Icon::show('circle'),
-                        ],
-                        [
-                            'label' => Yii::t('app', 'Auth Item Child'),
-                            'url' => ['/rbac/rbac-auth-item-child/index'],
-                            'icon' => Icon::show('circle'),
-                        ],
-                        [
-                            'label' => Yii::t('app', 'Auth Rules'),
-                            'url' => ['/rbac/rbac-auth-rule/index'],
-                            'icon' => Icon::show('circle'),
-                        ],
-                    ],
+                    "visible" => Yii::$app->user->can('userManage') || Yii::$app->user->can('advancedView'),
                 ],
             ],
         ]); ?>
